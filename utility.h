@@ -16,6 +16,9 @@ class utility
 		static void addGrey(image &src, image &tgt, int value);
 		static void colorMod(image &src, image &tgt, int value, int x, int y, int sx, int sy, const int rgb);
 		static void scale(image &src, image &tgt, float ratio);
+		static void binarize(image &src, image &tgt, int threshold);
+		static void cv_gray(cv::Mat &src, cv::Mat &tgt);
+		static void cv_avgblur(cv::Mat &src, cv::Mat &tgt, int WindowSize);
 		static void displayHistogram(image &src, image &hsm, int x, int y, int sx, int sy, char *fn);
 		static void stretching(image &src, image &tgt, int a, int b, int d, int x, int y, int sx, int sy);
 		static void biStretching(image &src, image &tgt, int a, int b, int c, int d, int e, int f, int x, int y, int sx, int sy);
