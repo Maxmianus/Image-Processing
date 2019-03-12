@@ -31,8 +31,10 @@ class utility
 		static void colorGrad(image &src, image &tgt, int threshold, int x, int y, int sx, int sy);
 		static int getDY(image &src, int x, int y);
 		static int getDX(image &src, int x, int y);
+		static int hsiAmp(image &src, int x, int y);
 		static void WS(image &src, image &tgt, int value, int x, int y, int sx, int sy);
 		static void oneWS(image &src, image &tgt, int value, int x, int y, int sx, int sy);
+		static void hsiEdge(image &src, image &tgt, int threshold, int x, int y, int sx, int sy);
 };
 
 #endif
