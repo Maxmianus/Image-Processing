@@ -418,3 +418,83 @@ void utility::cv_avgblur(Mat &src, Mat &tgt, int WindowSize)
 {
 	blur(src,tgt,Size(WindowSize,WindowSize));
 }
+
+/*________________________________________________________________________________________________**/
+void utility::WS(image &src, image &tgt, int value, int x, int y, int sx, int sy)
+{
+	tgt.copyImage(src);
+	
+	//First two for loops for iterating through x and y, last two for loops for iterating through size of window square size
+	for(int i=y; i<sy; i++)
+	{
+		for(int j=x; j<sx; j++)
+		{
+			int t = 0;
+			int p = 0;
+			int sum = 0;
+			
+			for(int m = i-1; t<value; m++)
+			{
+				for(int n = j-1; p<value; n++)
+				{
+					if((n || m) < 0)
+					{
+						sum = sum + MAXRGB;
+					}
+					else
+					{
+						sum = sum + src.getPixel(n, m);
+					}
+					
+					p++;
+				}
+				
+				t++;
+			}
+			
+			int q = sum/(value);
+			
+			tgt.setPixel(j, i, q);
+		}
+	
+	}
+}
+
+/*________________________________________________________________________________________________**/
+void utility::oneWS(image &src, image &tgt, int value, int x, int y, int sx, int sy)
+{
+	tgt.copyImage(src);
+	
+	for(int i=y; i<sy; i++)
+	{
+		for(int j=x; j<sx; j++)
+		{
+			int t = 0;
+			int p = 0;
+			int sum = 0;
+			
+			for(int m = i-1; t<value; m++)
+			{
+				for(int n = j-1; p<value; n++)
+				{
+					if((n || m) < 0)
+					{
+						sum = sum + MAXRGB;
+					}
+					else
+					{
+						sum = sum + src.getPixel(n, m);
+					}
+					
+					p++;
+				}
+				
+				t++;
+			}
+			
+			int q = sum/(value);
+			tgt.setPixel(j, i, q);
+		}
+	
+	}
+}
