@@ -498,3 +498,75 @@ void utility::oneWS(image &src, image &tgt, int value, int x, int y, int sx, int
 	
 	}
 }
+
+/*________________________________________________________________________________________________**/
+int utility::hsiAmp(image &src, int x, int y)
+{
+	int p1,p2,p3,p4,p6,p7,p8,p9;
+	
+	p1 = (src.getPixel(x-1,y-1,0) + src.getPixel(x-1,y-1,1) + src.getPixel(x-1,y-1,2))/3;
+	p2 = (src.getPixel(x,y-1,0) + src.getPixel(x,y-1,1) + src.getPixel(x,y-1,2))/3;
+	p3 = (src.getPixel(x+1,y-1,0) + src.getPixel(x+1,y-1,1) + src.getPixel(x+1,y-1,2))/3;
+	p4 = (src.getPixel(x-1,y,0) + src.getPixel(x-1,y,1) + src.getPixel(x-1,y,2))/3;
+	p6 = (src.getPixel(x+1,y,0) + src.getPixel(x+1,y,1) + src.getPixel(x+1,y,2))/3;
+	p7 = (src.getPixel(x-1,y+1,0) + src.getPixel(x-1,y+1,1) + src.getPixel(x-1,y+1,2))/3;
+	p8 = (src.getPixel(x,y+1,0) + src.getPixel(x,y+1,1) + src.getPixel(x,y+1,2))/3;
+	p9 = (src.getPixel(x+1,y+1,0) + src.getPixel(x+1,y+1,1) + src.getPixel(x+1,y+1,2))/3;
+	
+	int dx = abs(p3 + (2*p6) + p9 - (p1 + (2*p4) + p7));
+	int dy = abs(p1 + (2*p2) + p3) - (p7 + (2*p8) + p9);
+	int grad = dx + dy;
+	return grad;
+}
+
+/*________________________________________________________________________________________________**/
+void utility::hsiEdge(image &src, image &tgt, int threshold, int x, int y, int sx, int sy)
+{
+	float r, g, b, hue, sat, intensity, test;
+	int hold;
+	tgt.copyImage(src);
+	
+	for(int h=x; h<sx; ++h)
+	{
+		for(int j=y; j<sy; ++j)
+		{
+			r = (float)src.getPixel(h,j,0)/(float)(src.getPixel(h,j,0) + src.getPixel(h,j,1) + src.getPixel(h,j,2));
+			g = (float)src.getPixel(h,j,1)/(float)(src.getPixel(h,j,0) + src.getPixel(h,j,1) + src.getPixel(h,j,2));
+			b = (float)src.getPixel(h,j,2)/(float)(src.getPixel(h,j,0) + src.getPixel(h,j,1) + src.getPixel(h,j,2));
+			
+			if(b>g)
+			{
+				hue = ((2*3.14) - ((acos(((.5)*((r-g)+(r-b)))/(float)pow((pow((r-g),2) + (r-b)*(g-b)),(.5)))))) * 180/ 3.14;
+			}
+			else
+			{
+				hue = acos(((.5)*((r-g)+(r-b)))/(float)pow((pow((r-g),2) + (r-b)*(g-b)),(.5))) * 180/ 3.14;
+			}
+			
+			sat = (float)((1 - (3 * min(min(r,b),g)))*100);
+			
+			intensity = ((float)(src.getPixel(h,j,0) + src.getPixel(h,j,1) + src.getPixel(h,j,2))/(3*255))*255;
+			
+			if(r == g && r==b)
+			{
+				hue = 0;
+				sat = 0;
+			}
+			
+			hold = hsiAmp(src,h,j);
+			
+			if(hold > threshold-1)
+			{
+				sat = 0;
+				intensity = MAXRGB;
+				hsiToRGB(tgt, hue, sat, intensity, h, j);
+			}
+			else
+			{
+				sat = 0;
+				intensity = MINRGB;
+				hsiToRGB(tgt, hue, sat, intensity, h, j);
+			}
+		}
+	}
+}
