@@ -61,23 +61,61 @@ int main (int argc, char** argv)
 				tch = strtok(NULL, " ");
 				
 				utility::gradThresholdDir(src,tgt,atoi(pch),atoi(tch)-90,x,y,sx,sy);
-				
-				//src.copyImage(tgt);
 			}
 			else if(strncasecmp(pch,"gThresh",MAXLEN)==0) //
 			{
 				pch = strtok(NULL, " ");
 				
 				utility::gradThreshold(src,tgt,atoi(pch),x,y,sx,sy);
-				
-				//src.copyImage(tgt);
 			}
 			else if(strncasecmp(pch,"colorThresh",MAXLEN)==0)
 			{
 				pch = strtok(NULL, " "); //a
 				
 				utility::colorGrad(src,tgt,atoi(pch),x,y,sx,sy);
-				//src.copyImage(tgt);
+			}
+			else if (strncasecmp(pch,"binarize",MAXLEN)==0) 
+			{
+				/* Thresholding */
+				pch = strtok(NULL, " ");
+				tch = strtok(NULL, " ");
+				
+				utility::binarize(src,tgt,atoi(pch),atoi(tch),x,y,sx,sy);
+				src.copyImage(tgt);
+			}
+			else if(strncasecmp(pch,"colorMod",MAXLEN)==0)
+			{
+				pch = strtok(NULL, " ");
+				dR = atoi(pch);
+				
+				pch = strtok(NULL, " ");
+				dG = atoi(pch);
+				
+				pch = strtok(NULL, " ");
+				dB = atoi(pch);
+				
+				utility::colorMod(src,tgt,dR,x,y,sx,sy,0);
+				src.copyImage(tgt);
+				
+				utility::colorMod(src,tgt,dB,x,y,sx,sy,2);
+				src.copyImage(tgt);
+				
+				utility::colorMod(src,tgt,dG,x,y,sx,sy,1);
+				src.copyImage(tgt);
+			}
+			else if(strncasecmp(pch,"WS",MAXLEN)==0)
+			{
+				pch = strtok(NULL, " ");
+				
+				utility::WS(src, tgt, atoi(pch), x, y, sx, sy);
+				src.copyImage(tgt);
+			}
+			else if(strncasecmp(pch,"oneWS",MAXLEN)==0)
+			{
+				pch = strtok(NULL, " ");
+				
+				utility::oneWS(src, tgt, atoi(pch), x, y, sx, sy);
+				src.copyImage(tgt);
 			}
 			else 
 			{
