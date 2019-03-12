@@ -56,6 +56,24 @@ void utility::scale(image &src, image &tgt, float ratio)
 		}
 	}
 }
+
+/*-----------------------------------------------------------------------**/
+void utility::binarize(image &src, image &tgt, int threshold)
+{
+	tgt.resize(src.getNumberOfRows(), src.getNumberOfColumns());
+	for (int i=0; i<src.getNumberOfRows(); i++)
+	{
+		for (int j=0; j<src.getNumberOfColumns(); j++)
+		{
+			if (src.getPixel(i,j) < threshold)
+				tgt.setPixel(i,j,MINRGB);
+			else
+				tgt.setPixel(i,j,MAXRGB);
+		}
+	}
+}
+
+/*-----------------------------------------------------------------------**/
 //Try creating a black image then each number of values in the histogram corresponds to a a max RGB value
 void utility::displayHistogram(image &src, image &hsm, int x, int y, int sx, int sy, char *fn)
 {
@@ -91,6 +109,7 @@ void utility::displayHistogram(image &src, image &hsm, int x, int y, int sx, int
 	hsm.save(fn);
 }
 
+/*-----------------------------------------------------------------------**/
 void utility::biStretching(image &src, image &tgt, int a, int b, int c, int d, int e, int f, int x, int y, int sx, int sy)
 {
 	tgt.copyImage(src);
@@ -125,6 +144,7 @@ void utility::biStretching(image &src, image &tgt, int a, int b, int c, int d, i
 	}
 }
 
+/*-----------------------------------------------------------------------**/
 void utility::stretching(image &src, image &tgt, int a, int b, int d, int x, int y, int sx, int sy)
 {
 	tgt.copyImage(src);
@@ -153,6 +173,7 @@ void utility::stretching(image &src, image &tgt, int a, int b, int d, int x, int
 	}
 }
 
+/*-----------------------------------------------------------------------**/
 void utility::hsiStretching(image &src, image &tgt, int a, int bTwo, int e, int d, int x, int y, int sx, int sy)
 {
 	float r, g, b, hue, sat, intensity, test;
@@ -204,6 +225,7 @@ void utility::hsiStretching(image &src, image &tgt, int a, int bTwo, int e, int 
 	}
 }
 
+/*-----------------------------------------------------------------------**/
 void utility::hsiToRGB(image &src, float h, float s, float i, int x, int y)
 {
 	float m, n, o;//x, y, z
@@ -247,6 +269,7 @@ void utility::hsiToRGB(image &src, float h, float s, float i, int x, int y)
 	}
 }
 
+/*-----------------------------------------------------------------------**/
 int utility::gradientAmp(image &src, int x, int y)
 {
 	
@@ -258,10 +281,9 @@ int utility::gradientAmp(image &src, int x, int y)
 	grad = dx + dy;
 	
 	return grad;
-	//printf("gradient %d", grad);
-	
 }
 
+/*-----------------------------------------------------------------------**/
 int utility::colorAmp(image &src, int x, int y, int rgb)
 {
 	int dx = abs(src.getPixel(x+1,y-1,rgb) + (2*src.getPixel(x+1,y,rgb)) + src.getPixel(x+1, y+1,rgb) - (src.getPixel(x-1, y-1,rgb) + (2*src.getPixel(x-1,y,rgb)) + src.getPixel(x-1, y+1,rgb)));
@@ -271,6 +293,7 @@ int utility::colorAmp(image &src, int x, int y, int rgb)
 	return grad;
 }
 
+/*-----------------------------------------------------------------------**/
 int utility::getDX(image &src, int x, int y)
 {
 	int dx = src.getPixel(x+1,y-1) + (2*src.getPixel(x+1,y)) + src.getPixel(x+1, y+1) - (src.getPixel(x-1, y-1) + (2*src.getPixel(x-1,y)) + src.getPixel(x-1, y+1));
@@ -278,6 +301,7 @@ int utility::getDX(image &src, int x, int y)
 	return dx;
 }
 
+/*-----------------------------------------------------------------------**/
 int utility::getDY(image &src, int x, int y)
 {
 	int dy = src.getPixel(x-1,y-1) + (2*src.getPixel(x,y-1) + src.getPixel(x+1,y-1)) - (src.getPixel(x-1,y+1) + (2*src.getPixel(x,y+1)) + src.getPixel(x+1,y+1));
@@ -285,9 +309,9 @@ int utility::getDY(image &src, int x, int y)
 	return dy;
 }
 
+/*-----------------------------------------------------------------------**/
 void utility::gradThreshold(image &src, image &tgt, int threshold, int x, int y, int sx, int sy)
 {
-	//tgt.resize(src.getNumberOfRows(), src.getNumberOfColumns());
 	tgt.copyImage(src);
 	int gradTemp;
 	
@@ -308,7 +332,8 @@ void utility::gradThreshold(image &src, image &tgt, int threshold, int x, int y,
 		}
 	}
 }
-//same as above function, add
+
+/*-----------------------------------------------------------------------**/
 void utility::gradThresholdDir(image &src, image &tgt,int threshold, int dir, int x, int y, int sx, int sy)
 {
 	//tgt.resize(src.getNumberOfRows(), src.getNumberOfColumns());
@@ -350,7 +375,7 @@ void utility::gradThresholdDir(image &src, image &tgt,int threshold, int dir, in
 	}
 }
 
-//If pixel is white in one of the colors then white in picture
+/*-----------------------------------------------------------------------**/
 void utility::colorGrad(image &src, image &tgt, int threshold, int x, int y, int sx, int sy)
 {
 	tgt.copyImage(src);
@@ -380,4 +405,16 @@ void utility::colorGrad(image &src, image &tgt, int threshold, int x, int y, int
 		}
 	}
 	
+}
+
+/*-----------------------------------------------------------------------**/
+void utility::cv_gray(Mat &src, Mat &tgt)
+{
+	cvtColor(src, tgt, CV_BGR2GRAY);
+}
+
+/*-----------------------------------------------------------------------**/
+void utility::cv_avgblur(Mat &src, Mat &tgt, int WindowSize)
+{
+	blur(src,tgt,Size(WindowSize,WindowSize));
 }
