@@ -117,6 +117,60 @@ int main (int argc, char** argv)
 				utility::oneWS(src, tgt, atoi(pch), x, y, sx, sy);
 				src.copyImage(tgt);
 			}
+			else if(strncasecmp(pch,"hsiEdge",MAXLEN)==0)
+			{
+				pch = strtok(NULL, " ");
+				
+				utility::hsiEdge(src,tgt,atoi(pch),x,y,sx,sy);
+			}
+			else if (strncasecmp(pch,"greyStretch",MAXLEN)==0) 
+			{
+				pch = strtok(NULL, " "); //a
+				tch = strtok(NULL, " "); //b
+				gch = strtok(NULL, " "); //d
+				vch = strtok(NULL, " "); //histogram
+				ech = strtok(NULL, " "); //histogram before stretching
+				bch = strtok(NULL, " "); //after
+				
+				hsm.read(vch);
+				
+				utility::displayHistogram(src, hsm, x, y, sx, sy, ech);
+				utility::stretching(src,tgt,atoi(pch),atoi(tch), atoi(gch),x,y,sx,sy);
+				utility::displayHistogram(tgt, hsm, x, y, sx, sy, bch);
+				
+				src.copyImage(tgt);
+			}
+			else if(strncasecmp(pch,"hsiStretch",MAXLEN)==0)
+			{
+				pch = strtok(NULL, " ");
+				tch = strtok(NULL, " ");
+				gch = strtok(NULL, " ");
+				vch = strtok(NULL, " ");
+				
+				utility::hsiStretching(src,tgt,atoi(pch),atoi(tch),atoi(gch),atoi(vch),x,y,sx,sy);
+				
+				src.copyImage(tgt);
+			}
+			else if(strncasecmp(pch,"biStretch",MAXLEN)==0)
+			{
+				pch = strtok(NULL, " "); //a
+				tch = strtok(NULL, " "); //b
+				gch = strtok(NULL, " "); //c
+				vch = strtok(NULL, " "); //d
+				ech = strtok(NULL, " "); //e
+				bch = strtok(NULL, " "); //f
+				ach = strtok(NULL, " "); //histogram
+				dch = strtok(NULL, " "); // histogram before stretching
+				fch = strtok(NULL, " "); //histogram after
+				
+				hsm.read(ach);
+				
+				utility::displayHistogram(src,hsm,x,y,sx,sy,dch);
+				utility::biStretching(src,tgt,atoi(pch),atoi(tch),atoi(gch),atoi(vch),atoi(ech),atoi(bch),x,y,sx,sy);
+				utility::displayHistogram(tgt,hsm,x,y,sx,sy,fch);
+				
+				src.copyImage(tgt);
+			}
 			else 
 			{
 				printf("No function: %s\n", pch);
